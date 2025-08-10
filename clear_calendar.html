@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>記録カレンダー</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <button id="prevBtn">&lt;</button>
+            <div class="title-container">
+                <h1 id="calendarUserTitle" contenteditable="true"></h1>
+                <h2 id="calendarMonthTitle"></h2>
+            </div>
+            <button id="nextBtn">&gt;</button>
+        </div>
+        <div class="calendar-grid-header">
+            <div>日</div>
+            <div>月</div>
+            <div>火</div>
+            <div>水</div>
+            <div>木</div>
+            <div>金</div>
+            <div>土</div>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+    </div>
+
+    <div class="record-list-container">
+        <div class="color-picker-container">
+            <label id="themeColorLabel">テーマカラー:</label>            
+            <div id="currentColorPreview"></div>
+            <div id="themeColorPaletteWrapper" class="palette-wrapper">
+                <div id="themeColorPalette"></div>
+            </div>
+        </div>
+        <button id="exportCsvBtn">CSV出力</button>
+        <button id="clearAllRecordsBtn">全記録を削除</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

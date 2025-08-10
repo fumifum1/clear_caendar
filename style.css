@@ -1,0 +1,278 @@
+:root {
+    --theme-color: #4a90e2; /* デフォルトのテーマカラー */
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    background-color: #f0f2f5;
+}
+
+.calendar-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 600px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.title-container {
+    text-align: center;
+}
+
+.calendar-header #calendarUserTitle {
+    margin: 0;
+    font-size: 2.5em; /* フォントサイズを大きく */
+    font-weight: bold;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    outline: none; /* フォーカス時の枠線を非表示に */
+    padding: 2px 5px;
+    transition: border-bottom-color 0.2s;
+}
+
+.calendar-header #calendarMonthTitle {
+    margin: 5px 0 0 0;
+    font-size: 1em;
+    font-weight: normal;
+    color: #555;
+}
+
+.calendar-header #calendarUserTitle:hover,
+.calendar-header #calendarUserTitle:focus {
+    border-bottom-color: var(--theme-color); /* 編集時に下線を表示 */
+}
+
+.calendar-header button {
+    background-color: var(--theme-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: filter 0.2s ease-in-out;
+}
+
+.calendar-header button:hover {
+    filter: brightness(85%);
+}
+
+.calendar-grid-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: bold;
+    color: #666;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 5px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.day {
+    padding: 15px;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    transition: background-color 0.2s;
+    position: relative;
+    font-size: 14px;
+    color: #333;
+}
+
+.day:hover {
+    background-color: #e0e0e0;
+}
+
+.empty {
+    background-color: #f9f9f9;
+    cursor: default;
+    border: none;
+}
+
+.today {
+    border: 2px solid var(--theme-color);
+    font-weight: bold;
+}
+
+.record-mark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    width: 80%; /* セルに対する画像の幅 */
+    height: 80%; /* セルに対する画像の高さ */
+    object-fit: contain; /* 画像のアスペクト比を維持 */
+    transition: transform 0.2s ease-in-out; /* ホバーアニメーション用 */
+}
+
+.day:hover .record-mark {
+    transform: translate(-50%, -50%) scale(1.2); /* ホバー時に画像を少し大きくする */
+}
+
+.record-list-container {
+    margin-top: 30px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.color-picker-container {
+    position: relative; /* 子要素の絶対配置の基準点にする */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: auto; /* カラーピッカーを左側に配置 */
+}
+
+#themeColorLabel {
+    cursor: pointer; /* クリック可能であることを示す */
+    user-select: none; /* テキスト選択を無効化 */
+}
+
+#currentColorPreview {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+#currentColorPreview:hover {
+    transform: scale(1.1);
+}
+
+.palette-wrapper {
+    display: none; /* デフォルトで非表示 */
+    position: absolute;
+    bottom: 100%; /* ラベルの真上に表示 */
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 -4px 8px rgba(0,0,0,0.1);
+    z-index: 10; /* 他の要素より手前に表示 */
+}
+
+.palette-wrapper.show {
+    display: block; /* 表示状態 */
+}
+ 
+#themeColorPalette {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+ 
+.color-swatch {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #ddd;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+ 
+.color-swatch:hover {
+    transform: scale(1.1);
+}
+ 
+.color-swatch.active {
+    border-color: #333;
+    box-shadow: 0 0 0 2px white, 0 0 0 4px #333;
+}
+
+#exportCsvBtn,
+#clearAllRecordsBtn {
+    background-color: var(--theme-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: filter 0.2s ease-in-out;
+}
+
+#exportCsvBtn:hover,
+#clearAllRecordsBtn:hover {
+    filter: brightness(85%);
+}
+
+/* --- スマホ向けレスポンシブ対応 --- */
+@media (max-width: 600px) {
+    body {
+        margin: 10px;
+    }
+
+    .calendar-container {
+        padding: 15px;
+    }
+
+    .calendar-header #calendarUserTitle {
+        font-size: 1.8em;
+    }
+
+    .calendar-header #calendarMonthTitle {
+        font-size: 0.9em;
+    }
+
+    .calendar-header button {
+        padding: 8px 12px;
+    }
+
+    .calendar-grid-header {
+        font-size: 12px;
+    }
+
+    .day {
+        padding: 10px 5px;
+        font-size: 12px;
+    }
+
+    .record-list-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .color-picker-container {
+        margin-right: 0;
+        margin-bottom: 10px; /* ボタンとの間にスペースを追加 */
+        justify-content: center;
+    }
+
+    .palette-wrapper {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
