@@ -16,8 +16,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentMonth = currentDate.getMonth();
 
     const pastelColors = [
-        '#ffb3ba', '#ffdfba', '#ffffba', '#baffc9', '#bae1ff',
-        '#e0b4ff', '#fdeff2', '#d4eefd', '#c8e0b4', '#e4dcf1'
+        '#ffb3ba', // パステルピンク
+        '#ffdfba', // パステルピーチ
+        '#baffc9', // ミントグリーン
+        '#bae1ff', // ベビーブルー
+        '#a0d2eb', // スカイブルー
+        '#a8e6cf', // パステルグリーン
+        '#99ddc8', // ターコイズグリーン
+        '#c8e0b4', // オリーブグリーン
+        '#e0b4ff', // パステルパープル
+        '#d4eefd'  // ライトブルー
     ];
 
     let records = JSON.parse(localStorage.getItem('calendarRecords')) || {};
