@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>このカレンダーについて</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Aboutページ専用のスタイル */
+        .about-container {
+            background-color: #fff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 700px;
+            margin-top: 20px;
+        }
+        .about-container h1 {
+            text-align: center;
+            border-bottom: 2px solid var(--theme-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .about-container h2 {
+            color: var(--theme-color);
+            border-left: 5px solid var(--theme-color);
+            padding-left: 10px;
+            margin-top: 30px;
+        }
+        .about-container ul {
+            list-style: none;
+            padding-left: 15px;
+        }
+        .about-container li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            padding: 10px;
+            background-color: var(--theme-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: filter 0.2s;
+        }
+        .back-link:hover {
+            filter: brightness(85%);
+        }
+    </style>
+</head>
+<body>
+    <!-- ハンバーガーメニューアイコン -->
+    <div id="hamburgerIcon" class="hamburger-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- サイドナビゲーションメニュー -->
+    <nav id="sideNav" class="sidenav">
+        <ul>
+            <li><a href="https://fumifum1.github.io/profile/index.html">Profile</a></li>
+            <li><a href="clear_calendar.html">Calendar</a></li>
+            <li><a href="#">Other</a></li>
+        </ul>
+    </nav>
+
+    <!-- オーバーレイ -->
+    <div id="overlay" class="overlay"></div>
+
+    <div class="about-container">
+        <h1>使い方ガイド</h1>
+
+        <h2>基本的な使い方</h2>
+        <ul>
+            <li><strong>記録の追加/削除:</strong> 日付のマスをクリックすると、記録のスタンプを追加できます。もう一度クリックすると削除されます。</li>
+            <li><strong>月の移動:</strong> カレンダー上部の「&lt;」と「&gt;」ボタンで、前後の月に移動できます。</li>
+        </ul>
+
+        <h2>カスタマイズ機能</h2>
+        <ul>
+            <li><strong>タイトルの変更:</strong> カレンダーのタイトル（初期設定は「マイカレンダー」）をクリックすると、好きなタイトルに編集できます。編集後は自動で保存されます。</li>
+            <li><strong>テーマカラーの変更:</strong> カレンダー下部の「テーマカラー」の隣にある丸いアイコンをクリックすると、カラーパレットが表示されます。好きな色を選ぶと、カレンダー全体のテーマカラーが変更されます。</li>
+        </ul>
+
+        <h2>データ管理</h2>
+        <ul>
+            <li><strong>CSV出力:</strong> 「CSV出力」ボタンを押すと、記録した日付の一覧をCSVファイルとしてダウンロードできます。</li>
+            <li><strong>全記録を削除:</strong> 「全記録を削除」ボタンで、カレンダー上のすべての記録を削除できます。この操作は元に戻せないのでご注意ください。</li>
+        </ul>
+
+        <h2>データの保存について</h2>
+        <ul>
+            <li>記録したデータや設定は、お使いのブラウザ内（ローカルストレージ）に保存され、ブラウザを閉じたり、PCを再起動したりしてもデータは消えません。サーバーには送信されるものでもありません。そのため、別のパソコンやスマートフォン、別のブラウザではデータは共有されません。<br>
+                【注意点】ブラウザの閲覧履歴やキャッシュを完全に消去する操作を行うと、このデータも一緒に削除されてしまう可能性がありますので、事前にCSV出力をおすすめします。</li>
+        </ul>
+
+        <a href="clear_calendar.html" class="back-link">カレンダーに戻る</a>
+    </div>
+
+    <script>
+        // ページが読み込まれたときに実行
+        document.addEventListener('DOMContentLoaded', () => {
+            // ローカルストレージから保存されたテーマカラーを取得
+            const savedColor = localStorage.getItem('calendarThemeColor');
+            const defaultColor = '#a0d2eb'; // カレンダーページのデフォルトカラー
+
+            // 色が保存されていれば、ページのテーマカラーとして適用する
+            document.documentElement.style.setProperty('--theme-color', savedColor || defaultColor);
+
+            // --- ハンバーガーメニューの処理 ---
+            const hamburgerIcon = document.getElementById('hamburgerIcon');
+            const sideNav = document.getElementById('sideNav');
+            const overlay = document.getElementById('overlay');
+
+            function toggleMenu() {
+                hamburgerIcon.classList.toggle('active');
+                sideNav.classList.toggle('open');
+                overlay.classList.toggle('show');
+            }
+
+            // ハンバーガーアイコンとオーバーレイをクリックしたときにメニューを開閉
+            hamburgerIcon.addEventListener('click', toggleMenu);
+            overlay.addEventListener('click', toggleMenu);
+        });
+    </script>
+</body>
+</html>

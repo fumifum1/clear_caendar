@@ -173,12 +173,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const confirmation = confirm("すべての記録を削除してもよろしいですか？この操作は元に戻せません。");
+        const confirmation = confirm("本当にすべての記録をリセットしますか？この操作は取り消せません。");
         if (confirmation) {
             records = {}; // 記録オブジェクトを空にする
             localStorage.removeItem('calendarRecords'); // ローカルストレージからも削除
             renderCalendar(); // カレンダーを再描画して「〇」を消す
-            alert("すべての記録が削除されました。");
+            alert("すべての記録をリセットしました。");
         }
     }
 
@@ -224,6 +224,21 @@ document.addEventListener('DOMContentLoaded', () => {
     
     exportCsvBtn.addEventListener('click', exportCsv);
     clearAllRecordsBtn.addEventListener('click', clearAllRecords);
+
+    // --- ハンバーガーメニューの処理 ---
+    const hamburgerIcon = document.getElementById('hamburgerIcon');
+    const sideNav = document.getElementById('sideNav');
+    const overlay = document.getElementById('overlay');
+
+    function toggleMenu() {
+        hamburgerIcon.classList.toggle('active');
+        sideNav.classList.toggle('open');
+        overlay.classList.toggle('show');
+    }
+
+    // ハンバーガーアイコンとオーバーレイをクリックしたときにメニューを開閉
+    hamburgerIcon.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
 
     renderCalendar();
 });
