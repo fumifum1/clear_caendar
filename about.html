@@ -65,7 +65,9 @@
         <ul>
             <li><a href="https://fumifum1.github.io/profile/index.html">Profile</a></li>
             <li><a href="clear_calendar.html">Calendar</a></li>
-            <li><a href="#">Other</a></li>
+            <li><a href="https://fumifum1.github.io/profile/game.html">game</a></li>
+            <li><a href="https://fumifum1.github.io/profile/music.html">music</a></li>
+            <li><a href="https://fumifum1.github.io/profile/other.html">Other</a></li>
         </ul>
     </nav>
 
@@ -105,12 +107,22 @@
     <script>
         // ページが読み込まれたときに実行
         document.addEventListener('DOMContentLoaded', () => {
-            // ローカルストレージから保存されたテーマカラーを取得
-            const savedColor = localStorage.getItem('calendarThemeColor');
-            const defaultColor = '#a0d2eb'; // カレンダーページのデフォルトカラー
+            // 新しいデータ構造から最後にアクティブだったカレンダーのテーマカラーを取得
+            const savedData = localStorage.getItem('allCalendarsData');
+            const savedIndex = localStorage.getItem('activeCalendarIndex');
+            const defaultColor = '#4fc3f7'; // カレンダーページの新しいデフォルトカラーに合わせる
+            let themeColor = defaultColor;
 
-            // 色が保存されていれば、ページのテーマカラーとして適用する
-            document.documentElement.style.setProperty('--theme-color', savedColor || defaultColor);
+            if (savedData && savedIndex) {
+                try {
+                    const allCalendarsData = JSON.parse(savedData);
+                    const activeIndex = parseInt(savedIndex, 10);
+                    themeColor = allCalendarsData[activeIndex].themeColor || defaultColor;
+                } catch (e) {
+                    console.error("カレンダーデータの読み込みに失敗しました。", e);
+                }
+            }
+            document.documentElement.style.setProperty('--theme-color', themeColor);
 
             // --- ハンバーガーメニューの処理 ---
             const hamburgerIcon = document.getElementById('hamburgerIcon');
