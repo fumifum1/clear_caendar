@@ -156,14 +156,14 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     pointer-events: none;
-    width: 80%; /* セルに対する画像の幅 */
-    height: 80%; /* セルに対する画像の高さ */
+    width: 90%; /* セルに対する画像の幅 */
+    height: 90%; /* セルに対する画像の高さ */
     object-fit: contain; /* 画像のアスペクト比を維持 */
     transition: transform 0.2s ease-in-out; /* ホバーアニメーション用 */
 }
 
 .day:hover .record-mark {
-    transform: translate(-50%, -50%) scale(1.2); /* ホバー時に画像を少し大きくする */
+    transform: translate(-50%, -50%) scale(1.1); /* ホバー時に画像を少し大きくする */
 }
 
 .record-list-container {
