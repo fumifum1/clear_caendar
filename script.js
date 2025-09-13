@@ -170,7 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
             allCalendarsData = JSON.parse(savedData);
             // データ構造の移行処理
             migrateDataStructure(allCalendarsData);
-            activeCalendarIndex = savedIndex !== null ? parseInt(savedIndex, 10) : null;
+            const parsedIndex = parseInt(savedIndex, 10);
+            activeCalendarIndex = !isNaN(parsedIndex) ? parsedIndex : null;
         } else {
             // --- ここから下は初回起動時または旧データからの移行処理 ---
             // 古いデータ形式からの移行処理
@@ -214,10 +215,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         createSideNavMenu();
 
-        // 前回開いていたカレンダーがあれば復元する
-        if (activeCalendarIndex !== null) {
-            activeView = savedView || 'calendar';
+        // 前回開いていたビューを復元、なければデフォルト表示
+        activeView = savedView || 'calendar';
+
+        if (activeView === 'global-memo-list') {
+            // 「すべてのメモ」画面を復元
+            switchView('global-memo-list');
+        } else if (activeCalendarIndex !== null) {
+            // 特定のカレンダーのビュー（カレンダー or メモ一覧）を復元
             switchView(activeView, activeCalendarIndex);
+        } else {
+            // どのカレンダーもアクティブでなければ、カレンダー1をデフォルトで表示
+            switchView('calendar', 0);
         }
     }
  
