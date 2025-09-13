@@ -3,51 +3,57 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: Arial, sans-serif;    
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px;
-    background-color: #f0f2f5;
+    min-height: 100vh;
+    padding: 1rem;
+    margin: 0;
 }
 
 .calendar-tabs-container {
     width: 100%;
     max-width: 600px;
-    margin-bottom: -1px; /* タブとコンテナの境界線を重ねる */
-    position: relative;
-    z-index: 2; /* カレンダーコンテナより手前に表示 */
+    margin-bottom: 15px; /* コンテンツとの間に余白を設けます */
+    display: flex;
+    justify-content: center; /* ボタンを中央に配置 */
 }
 
 .calendar-tabs {
     display: flex;
+    gap: 10px; /* ボタン間の余白 */
 }
 
 .tab-btn {
     flex-grow: 1;
-    max-width: 150px;
+    max-width: 200px;
     padding: 10px 15px;
     border: 1px solid #ddd;
     background-color: #f0f2f5;
     cursor: pointer;
-    border-radius: 8px 8px 0 0;
+    border-radius: 6px; /* ボタンらしい角丸に変更 */
     font-size: 16px;
     transition: background-color 0.2s, color 0.2s;
-    border-bottom: none;
     color: #555;
 }
 
 .tab-btn.active {
-    background-color: #fff;
+    background-color: var(--theme-color);
     font-weight: bold;
-    color: var(--theme-color);
+    color: white;
+    border-color: var(--theme-color); /* 枠線の色もテーマカラーに */
+}
+
+#calendar-view {
+    width: 100%;
+    max-width: 600px;
 }
 
 .calendar-container {
     background-color: #fff;
     padding: 20px;
-    /* 上の角丸をなくし、アクティブなタブと一体化させる */
-    border-radius: 0 0 8px 8px;
+    border-radius: 8px; /* 全ての角を丸めます */
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 600px;
@@ -124,7 +130,10 @@ body {
 
 .day {
     padding: 15px;
-    text-align: center;
+    /* text-align: center; */ /* Flexboxで中央揃えするため不要に */
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-radius: 4px;
     cursor: pointer;
     background-color: #f9f9f9;
@@ -133,6 +142,20 @@ body {
     position: relative;
     font-size: 14px;
     color: #333;
+}
+
+.day-number {
+    position: relative; /* z-indexを有効にするため */
+    z-index: 1; /* スタンプより背面に配置 */
+}
+
+.memo-indicator {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-size: 10px;
+    pointer-events: none; /* アイコンがクリックイベントを妨げないように */
+    z-index: 3; /* 最前面に配置 */
 }
 
 .day:hover {
@@ -160,6 +183,7 @@ body {
     height: 90%; /* セルに対する画像の高さ */
     object-fit: contain; /* 画像のアスペクト比を維持 */
     transition: transform 0.2s ease-in-out; /* ホバーアニメーション用 */
+    z-index: 2; /* 数字より手前に配置 */
 }
 
 .day:hover .record-mark {
@@ -268,12 +292,7 @@ body {
 /* --- スマホ向けレスポンシブ対応 --- */
 @media (max-width: 600px) {
     body {
-        margin: 10px;
-    }
-
-    .calendar-tabs-container {
-        padding: 0 5px;
-        max-width: 100%;
+        padding: 10px;
     }
 
     .calendar-container {
@@ -316,16 +335,293 @@ body {
         left: 50%;
         transform: translateX(-50%);
     }
-
-    .hamburger-icon {
-        top: 15px;
-        right: 15px;
-    }
 }
 
-/* --- ハンバーガーメニュー --- */
+/* --- メモモーダル用スタイル --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+#modalDate {
+    margin-top: 0;
+    color: var(--theme-color);
+}
+
+#memoTextarea {
+    width: 100%;
+    height: 150px;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.modal-buttons button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: filter 0.2s;
+}
+
+.modal-buttons button:hover {
+    filter: brightness(90%);
+}
+
+#saveMemoBtn {
+    background-color: var(--theme-color);
+    color: white;
+}
+
+#deleteMemoBtn {
+    background-color: #f44336; /* 赤 */
+    color: white;
+}
+
+#closeModalBtn {
+    background-color: #ccc;
+}
+
+/* --- スタンプ選択UIのスタイル --- */
+.stamp-selector-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    position: relative; /* パレットの基準点 */
+    z-index: 1001; /* モーダル内の他の要素より手前に */
+}
+
+.stamp-preview-container {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    padding: 2px;
+    background-color: #f9f9f9;
+    transition: transform 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    color: #555;
+    user-select: none;
+}
+
+.stamp-preview-container:hover {
+    transform: scale(1.1);
+}
+
+.stamp-palette {
+    display: none; /* 初期状態は非表示 */
+    position: absolute;
+    top: 100%; /* コンテナの真下に表示 */
+    left: 50px; /* ラベルとプレビューの隣から表示 */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    gap: 8px;
+}
+
+.stamp-palette.show {
+    display: flex;
+}
+
+.stamp-palette-item {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    transition: transform 0.2s, border-color 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+    user-select: none;
+}
+
+.stamp-palette-item:hover {
+    transform: scale(1.1);
+}
+
+.stamp-palette-item.active {
+    border-color: var(--theme-color);
+}
+
+.stamp-palette-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.stamp-none-btn {
+    font-size: 14px;
+    color: #555;
+}
+
+/* --- 日付ごとメモ一覧モーダルのスタイル --- */
+.day-memo-list-container {
+    margin: 20px 0;
+    max-height: 40vh;
+    overflow-y: auto;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+.day-memo-list-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 5px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.day-memo-list-item:last-child {
+    border-bottom: none;
+}
+
+.day-memo-list-item:hover {
+    background-color: #f9f9f9;
+}
+
+.day-memo-list-item-stamp {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+}
+
+.day-memo-list-item-text {
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* --- メモ一覧ビューのスタイル --- */
+#memo-list-view {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px; /* 全ての角を丸めます */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 600px;
+    border: 1px solid #ddd;
+    border-top: 5px solid var(--theme-color);
+}
+
+.memo-list-header {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+#memoSearchInput {
+    flex-grow: 1;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.memo-list-item {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+.memo-list-item:hover {
+    background-color: #f9f9f9;
+}
+
+.memo-list-item:last-child {
+    border-bottom: none;
+}
+
+.memo-list-date {
+    font-weight: bold;
+    color: var(--theme-color);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.memo-list-date small {
+    font-weight: normal;
+    font-size: 0.8em;
+    color: #777;
+}
+
+.memo-list-content {
+    flex-grow: 1;
+}
+
+.memo-list-stamp {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.memo-list-text {
+    white-space: pre-wrap; /* 改行を反映 */
+    word-break: break-all; /* 長い単語を折り返す */
+    color: #333;
+}
+
+#exportAllCsvBtn {
+    flex-shrink: 0;
+    background-color: var(--theme-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: filter 0.2s ease-in-out;
+}
+
+#exportAllCsvBtn:hover {
+    filter: brightness(85%);
+}
+
+/* --- ハンバーガーメニューのスタイル --- */
 .hamburger-icon {
-    /* display: none; を削除して表示状態に戻す */
     position: fixed;
     top: 20px;
     right: 20px;
@@ -399,7 +695,8 @@ body {
     transition: 0.2s;
 }
 
-.sidenav ul li a:hover {
+.sidenav ul li a:hover,
+.sidenav ul li a.active {
     background-color: #e9ecef;
     color: var(--theme-color);
 }
